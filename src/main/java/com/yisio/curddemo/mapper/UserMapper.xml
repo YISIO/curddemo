@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yisio.curddemo.mapper.UserMapper">
+    <resultMap id="BaseResultMap" type="com.yisio.curddemo.bean.User">
+        <result column="UserId" property="UserId"/>
+        <result column="UserName" property="UserName"/>
+        <result column="Sex" property="Sex"/>
+        <result column="Wedlock" property="Wedlock"/>
+        <result column="Place" property="Place"/>
+    </resultMap>
+     <select id="getAllUser" resultMap="BaseResultMap">
+         select * from sysuser;
+     </select>
+    <insert id="AddUser"  parameterType="com.yisio.curddemo.bean.User">
+        insert into sysuser(UserName,Sex,Wedlock,Place)
+        values(#{UserName,jdbcType=VARCHAR},
+              #{Sex,jdbcType=BOOLEAN},
+              #{Wedlock,jdbcType=BOOLEAN},
+              #{Place,jdbcType=VARCHAR})
+    </insert>
+    <update id="updateUser">
+        update sysuser
+        <set>
+            UserName=#{users.UserName,jdbcType=VARCHAR},
+            Sex=#{users.Sex,jdbcType=BOOLEAN},
+            Wedlock=#{users.Wedlock,jdbcType=BOOLEAN},
+            Place=#{users.Place,jdbcType=VARCHAR}
+        </set>
+        where UserId=#{users.UserId,jdbcType=INTEGER}
+    </update>
+    <delete id="deleteUserByUserId">
+         DELETE  from sysuser where UserId in
+        <foreach collection="ids" separator="," open="(" close=")" item="id">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>
